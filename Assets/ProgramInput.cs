@@ -14,7 +14,7 @@ namespace BugFixer
         private void Start()
         {
             inputField = GetComponent<TMP_InputField>();
-            inputField.ActivateInputField();
+            SelectField();
         }
 
         private void Update()
@@ -22,18 +22,23 @@ namespace BugFixer
             CheckSubmit();
         }
 
+        public void SelectField()
+        {
+            inputField.ActivateInputField();
+        }
+
         private void CheckSubmit()
         {
             if (Input.GetKeyDown("return"))
             {
-                ParseCommand(inputField.text);
-                pastInputText.text = $"{inputField.text}\n" + pastInputText.text;
+                string output = ParseCommand(inputField.text);
+                pastInputText.text = $"{output}\n" + pastInputText.text;
                 inputField.text = "";
                 inputField.ActivateInputField();
             }
         }
 
-        private void ParseCommand(string command)
+        private string ParseCommand(string command)
         {
             string[] words = GetWords(command);
             
@@ -41,7 +46,15 @@ namespace BugFixer
             {
                 case "quit":
                     Application.Quit();
-                    break;
+                    return "Quitting...";
+                case "save":
+                    return "Error: could not save.";
+                case "help":
+                    return "Note to self: password is 7832";
+                case "7832":
+                    return "Successfully saved!";
+                default:
+                    return "Error: unknown command.";
             }
         }
 
